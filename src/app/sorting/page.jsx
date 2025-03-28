@@ -1,11 +1,12 @@
-'use client';
+'use client';;
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 import { delay, generateUniqueArray } from '@/lib/utilities';
 import { cn } from '@/lib/utils'
-import { Loader2 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react'
+import { ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 
@@ -29,12 +30,10 @@ const algorithms = [
 ]
 
 export default function Sorting() {
-    const [algorithm, setAlgorithm] = useState('selection')
+    const [algorithm, setAlgorithm] = useState('')
     const [array, setArray] = useState([])
-    const [arraySize, setArraySize] = useState(10)
+    const [arraySize, setArraySize] = useState(20)
     const [isLoading, setIsLoading] = useState(false)
-
-
 
 
     async function runSort() {
@@ -52,10 +51,10 @@ export default function Sorting() {
                 promise = selectionSort();
                 break;
             case 'insertion':
-                promise = quickSort();
+                promise = insertionSort();
                 break;
             case 'bubble':
-                promise = quickSort();
+                promise = bubbleSort();
                 break;
             default:
                 toast.error('Select an algorithm')
@@ -67,12 +66,63 @@ export default function Sorting() {
         promise.finally(() => setIsLoading(false))
     }
 
-    function insertionSort() {
-
+    function hightlight3(i, normal = false, color = "#30BC8D") {
+        document.getElementById("bar-" + i).style.backgroundColor = normal ? "#7AF2A8" : color;
     }
 
-    function bubbleSort() {
+    async function insertionSort() {
+        let arr = [...array]
 
+        for (let i = 0; i < arr.length - 1; i++) {
+            if (arr[i] > arr[i + 1]) {
+                let j = i;
+                while (j >= 0) {
+                    if (arr[j] > arr[j + 1]) {
+                        hightlight3(j, false, 'yellow')
+                        hightlight3(j + 1, false, 'yellow')
+                        await delay(50)
+                        let temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                        hightlight3(j, true)
+                        hightlight3(j + 1, true)
+                        setArray([...arr])
+                    } else {
+                        break;
+                    }
+                    j--;
+                }
+
+            }
+        }
+    }
+
+    async function bubbleSort() {
+        let arr = [...array];
+
+        let sortedIdx = arr.length - 1;
+        while (sortedIdx > 0) {
+            let i = 0;
+            while (i < sortedIdx) {
+                if (arr[i] > arr[i + 1]) {
+
+                    hightlight2(i, false, 'yellow')
+                    hightlight2(i + 1, false, 'yellow')
+
+                    await delay(50)
+                    let temp = arr[i];
+                    arr[i] = arr[i + 1];
+                    arr[i + 1] = temp;
+
+                    hightlight2(i, true)
+                    hightlight2(i + 1, true)
+
+                    setArray([...arr])
+                }
+                i++;
+            }
+            sortedIdx--;
+        }
     }
 
     function hightlight2(i, normal = false, color = "#30BC8D") {
@@ -82,13 +132,12 @@ export default function Sorting() {
     async function selectionSort() {
         let arr = [...array]
 
-        console.log('before => ', arr)
-
         let sortedIndex = 0;
         for (let i = 0; i < arr.length; i++) {
             let smallestIndex = sortedIndex;
 
-            hightlight2(sortedIndex, false, 'red')
+            hightlight2(sortedIndex, false)
+            await delay(50)
 
             for (let j = sortedIndex; j < arr.length; j++) {
                 hightlight2(j, false, 'yellow')
@@ -98,18 +147,16 @@ export default function Sorting() {
                 }
                 hightlight2(j, true)
             }
-            hightlight2(sortedIndex, true)
 
             let temp = arr[sortedIndex]
             arr[sortedIndex] = arr[smallestIndex];
             arr[smallestIndex] = temp;
-
+            await delay(50)
+            hightlight2(sortedIndex, true)
             sortedIndex++;
 
             setArray([...arr])
         }
-
-        console.log('after => ', arr)
     }
 
     async function quickSort() {
@@ -123,7 +170,7 @@ export default function Sorting() {
     function hightlight(l, r, normal = false) {
         for (let i = l; i <= r; i++) {
             // document.getElementById("array-item-" + i).style.backgroundColor = normal ? "white" : "#ecf2bc";
-            document.getElementById("bar-" + i).style.backgroundColor = normal ? "#7AF2A8" : "#30BC8D";
+            document.getElementById("bar-" + i).style.backgroundColor = normal ? "#7AF2A8" : 'yellow';
         }
     }
 
@@ -136,13 +183,13 @@ export default function Sorting() {
         if (l < r) {
             let m = Math.floor(l + (r - l) / 2);
 
-            await delay(100)
+            await delay(50)
             await divide(arr, l, m);
-            await delay(100)
+            await delay(50)
             await divide(arr, m + 1, r);
 
             hightlight(l, r);
-            await delay(100);
+            await delay(50);
 
             merge(arr, l, m, r);
             hightlight(l, r, true);
@@ -206,7 +253,10 @@ export default function Sorting() {
     return (
         <div className='h-screen flex flex-col'>
             <div className='flex justify-between bg-[#090B13] text-white items-center p-3'>
-                <h4 className=''>Sorting Visualiser</h4>
+                <Link href={'/'} className="flex transition 300 hover:text-blue-400 cursor-pointer">
+                    <ChevronLeft />
+                    <h4 className='ml-2'>Sorting Visualiser</h4>
+                </Link>
 
                 <div className='w-[50%] h-full flex items-center'>
                     <p className="text-sm w-fit">Set array</p>
@@ -238,7 +288,7 @@ export default function Sorting() {
 
 
                 <div className="flex gap-2">
-                    <Button disabled={isLoading} onClick={runSort} variant={'default'} className={'bg-white text-black hover:bg-gray-200 !disabled:bg-gray-200 disabled:text-gray-700'}>
+                    <Button disabled={isLoading} onClick={runSort} variant={'default'} className={'bg-blue-400 text-black hover:bg-gray-200 !disabled:bg-gray-200 disabled:text-gray-700'}>
                         Sort
                     </Button>
 
