@@ -264,11 +264,11 @@ export default function Sorting() {
         <div className='h-screen flex flex-col'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between bg-[#090B13] text-white items-center md:p-2 gap-2'>
 
-                <div className='flex p-2 w-full md:col-span-2 lg:col-span-1 items-center justify-center lg:justify-start'>
+                <div className='flex p-2 w-full md:col-span-2 lg:col-span-1 items-center justify-center lg:justify-start py-2 lg:py-0'>
                     <Link href={'/'} className="flex transition 300 hover:text-blue-400 cursor-pointer">
                         <ChevronLeft />
                     </Link>
-                    <h4 className='ml-2 text-md lg:text-xl flex-1 text-center lg:text-start'>Sorting Visualiser</h4>
+                    <h4 className='ml-2 text-md lg:text-xl flex-1 text-center lg:text-start font-bold'>Sorting Visualiser</h4>
                 </div>
 
 
