@@ -67,10 +67,6 @@ export default function Sorting() {
         promise.finally(() => setIsLoading(false))
     }
 
-    function hightlight3(i, normal = false, color = "#30BC8D") {
-        document.getElementById("bar-" + i).style.backgroundColor = normal ? "#7AF2A8" : color;
-    }
-
     async function insertionSort() {
         let arr = [...array]
 
@@ -79,14 +75,14 @@ export default function Sorting() {
                 let j = i;
                 while (j >= 0) {
                     if (arr[j] > arr[j + 1]) {
-                        hightlight3(j, false, 'yellow')
-                        hightlight3(j + 1, false, 'yellow')
+                        hightlight2(j, false, 'yellow')
+                        hightlight2(j + 1, false, 'yellow')
                         await delay(50)
                         let temp = arr[j];
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
-                        hightlight3(j, true)
-                        hightlight3(j + 1, true)
+                        hightlight2(j, true)
+                        hightlight2(j + 1, true)
                         setArray([...arr])
                     } else {
                         break;

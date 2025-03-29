@@ -1,6 +1,6 @@
 
 
-![intro-image](https://res.cloudinary.com/dvd6k9jub/image/upload/v1743223941/Algorithm_Visualiser_hbfirx.png)
+![intro-image](https://res.cloudinary.com/dvd6k9jub/image/upload/v1743240330/Algorithm_Visualiser_1_qljgxy.png)
 
 A web-based tool to visualize algorithms interactively. Supports sorting, searching, and pathfinding algorithms with real-time animations. Built using Next.js, Tailwind CSS, and ShadCN for a seamless experience.
 
@@ -18,7 +18,7 @@ A web-based tool to visualize algorithms interactively. Supports sorting, search
 ### Wanna try yourself?
 
 #### Prerequisites
-    node 18
+    node v18
 
 
 #### Clone the repo and run these commands

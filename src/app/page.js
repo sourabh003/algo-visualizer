@@ -18,8 +18,12 @@ export default function Home() {
 
 	return (
 		<div className="flex items-center w-screen h-screen justify-center flex-col">
-			<div className="text-white text-3xl">Algorithm Visualizer</div>
-			<div className="grid grid-cols-1 gap-3 place-items-center mt-10">
+			<div className="flex items-center gap-3 h-[20vh]">
+				<img src="/logo.png" alt="" className="w-20" />
+				<div className="text-white text-4xl">Algorithm Visualizer</div>
+			</div>
+
+			<div className="grid grid-cols-1 gap-3 place-items-center mt-5 flex-1">
 				{menus.map((menu) => (
 					<div
 						key={menu.label}
@@ -32,6 +36,9 @@ export default function Home() {
 					</div>
 				))}
 			</div>
+            <div className="p-2 text-white text-xs w-full text-center">
+                Created by <a href="https://github.com/sourabh003/" target="_blank" className="text-blue-500 hover:text-sky-300">csourabh003</a>
+            </div>
 		</div>
 	);
 }
