@@ -16,7 +16,7 @@ const META_TITLE = "Algorithm Visualiser";
 const META_DESCRIPTION =
 	"A web-based tool to visualize algorithms like sorting, searching, and pathfinding in real-time.";
 const META_IMAGE =
-	"https://res.cloudinary.com/dvd6k9jub/image/upload/v1743259721/Algorithm_Visualiser_ihw35k.png";
+	"https://algo-visualizer-iota-ruddy.vercel.app/intro-banner.png";
 
 export const metadata = {
 	title: META_TITLE,
