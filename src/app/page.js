@@ -9,17 +9,17 @@ export default function Home() {
 			path: "/sorting",
 			icon: <AlignEndHorizontal size={50} />,
 		},
-		{
-			label: "Searching Algorithms",
-			path: "/sorting",
-			icon: <Search size={50} />,
-		},
+		// {
+		// 	label: "Searching Algorithms",
+		// 	path: "/sorting",
+		// 	icon: <Search size={50} />,
+		// },
 	];
 
 	return (
 		<div className="flex items-center w-screen h-screen justify-center flex-col">
 			<div className="text-white text-3xl">Algorithm Visualizer</div>
-			<div className="grid grid-cols-2 gap-3 place-items-center mt-10">
+			<div className="grid grid-cols-1 gap-3 place-items-center mt-10">
 				{menus.map((menu) => (
 					<div
 						key={menu.label}

@@ -11,10 +11,11 @@ import toast from 'react-hot-toast';
 
 
 const algorithms = [
+    // {
+    //     id: 'quick',
+    //     label: 'Quick Sort',
+    // },
     {
-        id: 'quick',
-        label: 'Quick Sort',
-    }, {
         id: 'merge',
         label: 'Merge Sort',
     }, {
