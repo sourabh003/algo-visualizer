@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import Head from "next/head";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -14,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 const META_TITLE = "Algorithm Visualiser";
-const META_DESCRIPTION = "Visualise how some of the core algorithms work";
+const META_DESCRIPTION =
+	"A web-based tool to visualize algorithms like sorting, searching, and pathfinding in real-time.";
+const META_IMAGE =
+	"https://res.cloudinary.com/dvd6k9jub/image/upload/v1743259721/Algorithm_Visualiser_ihw35k.png";
 
 export const metadata = {
 	title: META_TITLE,
@@ -27,16 +29,33 @@ export const metadata = {
 			url: "/logo.png",
 		},
 	],
+	openGraph: {
+		title: META_TITLE,
+		description: META_DESCRIPTION,
+		url: "https://algo-visualizer-iota-ruddy.vercel.app",
+		siteName: META_TITLE,
+		images: [
+			{
+				url: META_IMAGE, // Replace with your actual OG image
+				width: 1200,
+				height: 630,
+				alt: "Algorithm Visualizer Screenshot",
+			},
+		],
+		locale: "en_US",
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: META_TITLE,
+		description: META_DESCRIPTION,
+		images: [META_IMAGE], // Replace with your OG image
+	},
 };
 
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en">
-			<Head>
-				<meta property="og:title" content={META_TITLE} />
-				<meta property="og:description" content={META_DESCRIPTION} />
-				<meta property="og:image" content="https://res.cloudinary.com/dvd6k9jub/image/upload/v1743259721/Algorithm_Visualiser_ihw35k.png" />
-			</Head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				cz-shortcut-listen="true"
