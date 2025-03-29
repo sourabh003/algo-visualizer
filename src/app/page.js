@@ -49,7 +49,7 @@ export default function Home() {
 					<a
 						href="https://github.com/sourabh003/"
 						target="_blank"
-						className="text-blue-500 hover:text-sky-300"
+						className="text-blue-500 hover:text-sky-400"
 					>
 						csourabh003
 					</a>

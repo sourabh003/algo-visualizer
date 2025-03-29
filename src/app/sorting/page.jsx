@@ -72,19 +72,24 @@ export default function Sorting() {
 
         for (let i = 0; i < arr.length - 1; i++) {
             if (arr[i] > arr[i + 1]) {
+                // if current element is greater than next element
                 let j = i;
+                // reverse iteration from current index to first index
                 while (j >= 0) {
+                    // checking if current item is greater than previous item
                     if (arr[j] > arr[j + 1]) {
-                        hightlight2(j, false, 'yellow')
-                        hightlight2(j + 1, false, 'yellow')
+                        // if yes, swapping the eleemnts
+                        highlightSingleElement(j, false, 'yellow')
+                        highlightSingleElement(j + 1, false, 'yellow')
                         await delay(50)
                         let temp = arr[j];
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
-                        hightlight2(j, true)
-                        hightlight2(j + 1, true)
+                        highlightSingleElement(j, true)
+                        highlightSingleElement(j + 1, true)
                         setArray([...arr])
                     } else {
+                        // if no, then breaking the inner loop, item reached the right position
                         break;
                     }
                     j--;
@@ -103,16 +108,16 @@ export default function Sorting() {
             while (i < sortedIdx) {
                 if (arr[i] > arr[i + 1]) {
 
-                    hightlight2(i, false, 'yellow')
-                    hightlight2(i + 1, false, 'yellow')
+                    highlightSingleElement(i, false, 'yellow')
+                    highlightSingleElement(i + 1, false, 'yellow')
 
                     await delay(50)
                     let temp = arr[i];
                     arr[i] = arr[i + 1];
                     arr[i + 1] = temp;
 
-                    hightlight2(i, true)
-                    hightlight2(i + 1, true)
+                    highlightSingleElement(i, true)
+                    highlightSingleElement(i + 1, true)
 
                     setArray([...arr])
                 }
@@ -122,7 +127,7 @@ export default function Sorting() {
         }
     }
 
-    function hightlight2(i, normal = false, color = "#30BC8D") {
+    function highlightSingleElement(i, normal = false, color = "#30BC8D") {
         document.getElementById("bar-" + i).style.backgroundColor = normal ? "#7AF2A8" : color;
     }
 
@@ -133,38 +138,46 @@ export default function Sorting() {
         for (let i = 0; i < arr.length; i++) {
             let smallestIndex = sortedIndex;
 
-            hightlight2(sortedIndex, false)
+            highlightSingleElement(sortedIndex, false)
             await delay(50)
 
             for (let j = sortedIndex; j < arr.length; j++) {
-                hightlight2(j, false, 'yellow')
+                highlightSingleElement(j, false, 'yellow')
                 await delay(50)
                 if (arr[j] < arr[smallestIndex]) {
                     smallestIndex = j;
                 }
-                hightlight2(j, true)
+                highlightSingleElement(j, true)
             }
 
             let temp = arr[sortedIndex]
             arr[sortedIndex] = arr[smallestIndex];
             arr[smallestIndex] = temp;
             await delay(50)
-            hightlight2(sortedIndex, true)
+            highlightSingleElement(sortedIndex, true)
             sortedIndex++;
 
             setArray([...arr])
         }
     }
 
+    /**
+     * Quick sort
+     */
+
     async function quickSort() {
 
     }
 
     /**
+     * Quick sort END
+     */
+
+    /**
      * Merge sort
      */
 
-    function hightlight(l, r, normal = false) {
+    function hightlightRange(l, r, normal = false) {
         for (let i = l; i <= r; i++) {
             // document.getElementById("array-item-" + i).style.backgroundColor = normal ? "white" : "#ecf2bc";
             document.getElementById("bar-" + i).style.backgroundColor = normal ? "#7AF2A8" : 'yellow';
@@ -185,11 +198,11 @@ export default function Sorting() {
             await delay(50)
             await divide(arr, m + 1, r);
 
-            hightlight(l, r);
+            hightlightRange(l, r);
             await delay(50);
 
             merge(arr, l, m, r);
-            hightlight(l, r, true);
+            hightlightRange(l, r, true);
             setArray([...arr])
         }
     }
@@ -304,7 +317,7 @@ export default function Sorting() {
                             <div
                                 id={`bar-${i}`}
                                 key={i}
-                                className={cn("bg-green-300 border-green-400 ",
+                                className={cn("bg-green-300 border-green-400",
                                     array.length > 50 ? "w-[12px]" : "w-[28px]"
                                 )}
                                 style={{ height: item * 2 + "px" }}>
