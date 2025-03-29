@@ -18,9 +18,9 @@ export default function Home() {
 
 	return (
 		<div className="flex items-center w-screen h-screen justify-center flex-col">
-			<div className="flex items-center gap-3 h-[20vh]">
-				<img src="/logo.png" alt="" className="w-20" />
-				<div className="text-white text-4xl">Algorithm Visualizer</div>
+			<div className="flex items-center gap-3 h-[10vh] md:h-[20vh]">
+				<img src="/logo.png" alt="" className="w-10 md:w-20" />
+				<div className="text-white md:text-4xl">Algorithm Visualizer</div>
 			</div>
 
 			<div className="grid grid-cols-1 gap-3 place-items-center mt-5 flex-1">

@@ -262,14 +262,18 @@ export default function Sorting() {
 
     return (
         <div className='h-screen flex flex-col'>
-            <div className='flex justify-between bg-[#090B13] text-white items-center p-3'>
-                <Link href={'/'} className="flex transition 300 hover:text-blue-400 cursor-pointer">
-                    <ChevronLeft />
-                    <h4 className='ml-2'>Sorting Visualiser</h4>
-                </Link>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between bg-[#090B13] text-white items-center md:p-2 gap-2'>
 
-                <div className='w-[50%] h-full flex items-center'>
-                    <p className="text-sm w-fit">Set array</p>
+                <div className='flex p-2 w-full md:col-span-2 lg:col-span-1 items-center justify-center lg:justify-start'>
+                    <Link href={'/'} className="flex transition 300 hover:text-blue-400 cursor-pointer">
+                        <ChevronLeft />
+                    </Link>
+                    <h4 className='ml-2 text-md lg:text-xl flex-1 text-center lg:text-start'>Sorting Visualiser</h4>
+                </div>
+
+
+                <div className='h-full flex items-center px-3 lg:px-0 col-span-1'>
+                    <p className="text-sm w-fit">Array size</p>
                     <div className='flex-1 ml-4'>
                         <Slider
                             disabled={isLoading}
@@ -283,21 +287,20 @@ export default function Sorting() {
                     </div>
                 </div>
 
-                <div>
-                    <Select disabled={isLoading} value={algorithm} onValueChange={(newValue) => setAlgorithm(newValue)}>
-                        <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select Algorithm" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {algorithms.map(a => (
-                                <SelectItem key={a.id} value={a.id}>{a.label}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                </div>
+                <div className='p-3 md:p-0 flex items-center gap-2 md:justify-end'>
+                    <div className='w-full md:w-fit'>
+                        <Select className="" disabled={isLoading} value={algorithm} onValueChange={(newValue) => setAlgorithm(newValue)}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Algorithm" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {algorithms.map(a => (
+                                    <SelectItem key={a.id} value={a.id}>{a.label}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
 
-
-                <div className="flex gap-2">
                     <Button disabled={isLoading} onClick={runSort} variant={'default'} className={'bg-blue-400 text-black hover:bg-gray-200 !disabled:bg-gray-200 disabled:text-gray-700'}>
                         Sort
                     </Button>
@@ -305,34 +308,25 @@ export default function Sorting() {
                     <Button disabled={isLoading} onClick={() => setArray(generateUniqueArray(arraySize))} variant={'outlined'} className={'border'}>
                         Reset
                     </Button>
-                </div>
 
+                </div>
             </div>
 
             <div className="flex-1 grid place-items-center">
                 <div className='p-2'>
-
                     <div className='flex items-end gap-[1px]'>
                         {array.map((item, i) => (
                             <div
                                 id={`bar-${i}`}
                                 key={i}
                                 className={cn("bg-green-300 border-green-400",
-                                    array.length > 50 ? "w-[12px]" : "w-[28px]"
+                                    array.length > 50 ? "w-[2px] md:w-[6px] lg:w-[12px]" : "w-[5px] md:w-[12px] lg:w-[28px]"
                                 )}
                                 style={{ height: item * 2 + "px" }}>
                             </div>
                         ))}
                     </div>
-                    {/* <div className='flex gap-[1px]'>
-                        {array.map((item, i) => (
-                            <div id={`array-item-${i}`} key={i} className={`w-[28px] flex flex-col h-[50%] justify-end`}>
-                                <div className='p-1 text-sm grid place-items-center'>{item}</div>
-                            </div>
-                        ))}
-                    </div> */}
                 </div>
-
             </div>
         </div>
     )
