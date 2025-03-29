@@ -1,4 +1,4 @@
-import { AlignEndHorizontal, Search } from "lucide-react";
+import { AlignEndHorizontal, Code, Github, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,9 +36,25 @@ export default function Home() {
 					</div>
 				))}
 			</div>
-            <div className="p-2 text-white text-xs w-full text-center">
-                Created by <a href="https://github.com/sourabh003/" target="_blank" className="text-blue-500 hover:text-sky-300">csourabh003</a>
-            </div>
+			<div className="p-2 text-white text-xs w-full text-center flex items-center justify-center">
+				<div className="w-auto mr-2 text-gray-400 hover:text-sky-400 cursor-pointer">
+					<a href="https://github.com/sourabh003/algo-visualizer" target="_blank" className="flex items-center">
+						<Github className="w-[15px]  mr-1" />
+						Github repo
+					</a>
+                </div>
+                &bull;
+				<span className="ml-2">
+					Created by{" "}
+					<a
+						href="https://github.com/sourabh003/"
+						target="_blank"
+						className="text-blue-500 hover:text-sky-300"
+					>
+						csourabh003
+					</a>
+				</span>
+			</div>
 		</div>
 	);
 }
