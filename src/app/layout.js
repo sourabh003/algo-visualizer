@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
 			<Head>
 				<meta property="og:title" content={META_TITLE} />
 				<meta property="og:description" content={META_DESCRIPTION} />
-				<meta property="og:image" content="/hero-image.png" />
+				<meta property="og:image" content="https://res.cloudinary.com/dvd6k9jub/image/upload/v1743259721/Algorithm_Visualiser_ihw35k.png" />
 			</Head>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}

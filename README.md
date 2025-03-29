@@ -1,6 +1,6 @@
 
 
-![intro-image](https://res.cloudinary.com/dvd6k9jub/image/upload/v1743240330/Algorithm_Visualiser_1_qljgxy.png)
+![intro-image](https://res.cloudinary.com/dvd6k9jub/image/upload/v1743259721/Algorithm_Visualiser_ihw35k.png)
 
 A web-based tool to visualize algorithms interactively. Supports sorting, searching, and pathfinding algorithms with real-time animations. Built using Next.js, Tailwind CSS, and ShadCN for a seamless experience.
 
