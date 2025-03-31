@@ -1,20 +1,21 @@
-'use client';;
+'use client';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 import { delay, generateUniqueArray } from '@/lib/utilities';
 import { cn } from '@/lib/utils'
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Database, Hourglass, Play, RefreshCcw, StopCircle, Timer } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 
 const algorithms = [
-    // {
-    //     id: 'quick',
-    //     label: 'Quick Sort',
-    // },
+    {
+        id: 'quick',
+        label: 'Quick Sort',
+    },
     {
         id: 'merge',
         label: 'Merge Sort',
@@ -36,35 +37,87 @@ export default function Sorting() {
     const [arraySize, setArraySize] = useState(20)
     const [isLoading, setIsLoading] = useState(false)
 
+    const [executionTime, setExecutionTime] = useState(0)
+    const [delayTime, setDelayTime] = useState(25)
+
+    const controller = new AbortController()
+
+
+    const handleBeforeUnload = (event) => {
+        event.preventDefault();
+        event.returnValue = "Execution in progress!, Please stop the execution before exiting"; // Standard way to show a warning
+    };
+
+    useEffect(() => {
+        let interval;
+
+        if (isLoading) {
+            // window.addEventListener("beforeunload", handleBeforeUnload);
+
+            interval = setInterval(() => {
+                setExecutionTime(prev => prev + 10)
+            }, 10);
+        } else {
+            clearInterval(interval)
+        }
+
+        return () => {
+            clearInterval(interval)
+            // window.removeEventListener("beforeunload", handleBeforeUnload);
+        }
+    }, [isLoading])
 
     async function runSort() {
-        setIsLoading(true)
 
-        let promise;
+        let promiseFunc = null;
         switch (algorithm) {
             case 'quick':
-                promise = quickSort();
+                promiseFunc = quickSort;
                 break;
             case 'merge':
-                promise = mergeSort()
+                promiseFunc = mergeSort;
                 break;
             case 'selection':
-                promise = selectionSort();
+                promiseFunc = selectionSort;
                 break;
             case 'insertion':
-                promise = insertionSort();
+                promiseFunc = insertionSort;
                 break;
             case 'bubble':
-                promise = bubbleSort();
+                promiseFunc = bubbleSort;
                 break;
             default:
                 toast.error('Select an algorithm')
-                setIsLoading(false)
                 return;
         }
-        if (!promise) return;
-        toast.promise(promise, { loading: 'Just a sec!', error: 'Oops! Try again', success: "Voila!" })
-        promise.finally(() => setIsLoading(false))
+        if (!promiseFunc) return;
+
+        setIsLoading(true)
+
+        let promise = new Promise((resolve, reject) => {
+            controller.signal.addEventListener("abort", () => {
+                reject(new Error("Operation aborted"));
+            });
+            promiseFunc().then(resolve).catch(reject)
+        })
+
+        toast.promise(promise, {
+            loading: 'Just a moment!',
+            error: (error) => {
+                if (error.message == "AbortError") return 'Execution terminated!';
+                return 'Oops! Try again'
+            },
+            success: "Voila!"
+        })
+
+        promise.catch(err => {
+            console.log({ err })
+        }).finally(() => setIsLoading(false))
+    }
+
+    function reset() {
+        setExecutionTime(0)
+        setArray(generateUniqueArray(arraySize))
     }
 
     async function insertionSort() {
@@ -81,7 +134,7 @@ export default function Sorting() {
                         // if yes, swapping the eleemnts
                         highlightSingleElement(j, false, 'yellow')
                         highlightSingleElement(j + 1, false, 'yellow')
-                        await delay(50)
+                        await delay(delayTime)
                         let temp = arr[j];
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
@@ -111,7 +164,7 @@ export default function Sorting() {
                     highlightSingleElement(i, false, 'yellow')
                     highlightSingleElement(i + 1, false, 'yellow')
 
-                    await delay(50)
+                    await delay(delayTime)
                     let temp = arr[i];
                     arr[i] = arr[i + 1];
                     arr[i + 1] = temp;
@@ -139,11 +192,11 @@ export default function Sorting() {
             let smallestIndex = sortedIndex;
 
             highlightSingleElement(sortedIndex, false)
-            await delay(50)
+            await delay(delayTime)
 
             for (let j = sortedIndex; j < arr.length; j++) {
                 highlightSingleElement(j, false, 'yellow')
-                await delay(50)
+                await delay(delayTime)
                 if (arr[j] < arr[smallestIndex]) {
                     smallestIndex = j;
                 }
@@ -153,7 +206,7 @@ export default function Sorting() {
             let temp = arr[sortedIndex]
             arr[sortedIndex] = arr[smallestIndex];
             arr[smallestIndex] = temp;
-            await delay(50)
+            await delay(delayTime)
             highlightSingleElement(sortedIndex, true)
             sortedIndex++;
 
@@ -166,7 +219,62 @@ export default function Sorting() {
      */
 
     async function quickSort() {
+        let arr = [...array];
+        // setExecutionTime(Date.now())
+        await sort(arr, 0, arr.length - 1)
 
+        setArray([...arr])
+    }
+
+    async function sort(arr, l, r) {
+        if (l < r) {
+            let i = l - 1;
+            let j = l;
+            let pivot = r;
+
+            highlightSingleElement(pivot, false, 'red')
+            await delay(delayTime);
+
+            while (j < pivot) {
+                if (arr[j] >= arr[pivot]) {
+                    highlightSingleElement(j, false, 'yellow')
+                    await delay(delayTime)
+                    highlightSingleElement(j, true)
+                    j++;
+                } else {
+                    // incrementing i before and j after swapping
+
+                    if (i >= 0) highlightSingleElement(i, false, 'yellow')
+                    highlightSingleElement(j, false, 'yellow')
+                    await delay(delayTime);
+                    if (i >= 0) highlightSingleElement(i, true)
+                    highlightSingleElement(j, true)
+
+                    swap(arr, ++i, j++)
+
+                    highlightSingleElement(i, false, 'yellow')
+                    highlightSingleElement(j, false, 'yellow')
+                    await delay(delayTime);
+                    highlightSingleElement(i, true)
+                    highlightSingleElement(j, true)
+                }
+
+
+            }
+            highlightSingleElement(pivot, true)
+            swap(arr, ++i, pivot);
+
+            setArray([...arr])
+
+            await sort(arr, l, i - 1)
+            await sort(arr, i + 1, r)
+        }
+    }
+
+    function swap(arr, idx1, idx2) {
+        let temp = arr[idx1];
+        arr[idx1] = arr[idx2];
+        arr[idx2] = temp;
     }
 
     /**
@@ -193,13 +301,13 @@ export default function Sorting() {
         if (l < r) {
             let m = Math.floor(l + (r - l) / 2);
 
-            await delay(50)
+            await delay(delayTime)
             await divide(arr, l, m);
-            await delay(50)
+            await delay(delayTime)
             await divide(arr, m + 1, r);
 
             hightlightRange(l, r);
-            await delay(50);
+            await delay(delayTime);
 
             merge(arr, l, m, r);
             hightlightRange(l, r, true);
@@ -257,7 +365,7 @@ export default function Sorting() {
      */
 
     useEffect(() => {
-        setArray(generateUniqueArray(arraySize))
+        reset()
     }, [arraySize])
 
     return (
@@ -289,7 +397,7 @@ export default function Sorting() {
 
                 <div className='p-3 md:p-0 flex items-center gap-2 md:justify-end'>
                     <div className='w-full md:w-fit'>
-                        <Select className="" disabled={isLoading} value={algorithm} onValueChange={(newValue) => setAlgorithm(newValue)}>
+                        <Select className="" disabled={isLoading} value={algorithm} onValueChange={(newValue) => [setAlgorithm(newValue), reset()]}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select Algorithm" />
                             </SelectTrigger>
@@ -301,20 +409,66 @@ export default function Sorting() {
                         </Select>
                     </div>
 
-                    <Button disabled={isLoading} onClick={runSort} variant={'default'} className={'bg-blue-400 text-black hover:bg-gray-200 !disabled:bg-gray-200 disabled:text-gray-700'}>
-                        Sort
+                    <div className='w-full md:w-fit'>
+                        <Select className="" disabled={isLoading} value={delayTime} onValueChange={(newValue) => [setDelayTime(newValue)]}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Delay" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {[10, 25, 50, 75, 100, 125, 150].map(time => (
+                                    <SelectItem key={time} value={time}>{time}ms</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <Button disabled={isLoading} onClick={runSort} variant={'default'} className={'bg-blue-400 text-black hover:bg-gray-200 !disabled:bg-gray-200 disabled:text-gray-700 cursor-pointer'}>
+                        <Play /> <span className='hidden md:block'>Run</span>
                     </Button>
 
-                    <Button disabled={isLoading} onClick={() => setArray(generateUniqueArray(arraySize))} variant={'outlined'} className={'border'}>
-                        Reset
+                    <Button disabled={isLoading} onClick={reset} variant={'outlined'} className={'border cursor-pointer hover:text-gray-400 hover:border-gray-400'}>
+                        <RefreshCcw />
+                        <span className='hidden md:block'>Reset</span>
                     </Button>
 
                 </div>
             </div>
 
-            <div className="flex-1 grid place-items-center">
-                <div className='p-2'>
-                    <div className='flex items-end gap-[1px]'>
+            <div className="flex-1 flex flex-col p-2">
+                <div className='p-2 justify-between flex'>
+
+                    <div className="">
+                        <div className='text-white flex items-center'>
+                            <Timer className='w-5' />
+                            <div className='ml-2'>Execution time: <span className='text-teal-500 font-bold'>{executionTime / 1000}s</span></div>
+                        </div>
+
+                        <div className='text-white flex items-center mt-2'>
+                            <Database className='w-5' />
+                            <div className='ml-2'>Input size: <span className='text-teal-500 font-bold'>{arraySize}</span></div>
+                        </div>
+
+                        <div className='text-white flex items-center mt-2'>
+                            <Hourglass className='w-5' />
+                            <div className='ml-2'>Execution delay: <span className='text-teal-500 font-bold'>{delayTime}ms</span></div>
+                        </div>
+                    </div>
+
+                    {/* {isLoading && (
+                        <Button
+                            onClick={() => {
+                                controller.abort()
+                            }}
+                            variant={'destructive'}
+                            className={'cursor-pointer bg-red-400'}
+                        >
+
+                        </Button>
+                    )} */}
+                </div>
+
+                <div className="w-full flex flex-col items-center flex-1 justify-center">
+                    <div className='flex items-end gap-[1px] justify-center'>
                         {array.map((item, i) => (
                             <div
                                 id={`bar-${i}`}
@@ -327,6 +481,7 @@ export default function Sorting() {
                         ))}
                     </div>
                 </div>
+
             </div>
         </div>
     )
