@@ -1,5 +1,4 @@
-import { AlignEndHorizontal, Code, Github, Search } from "lucide-react";
-import Image from "next/image";
+import { AlignEndHorizontal, Github, Search } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -8,6 +7,10 @@ export default function Home() {
 			label: "Sorting Algorithms",
 			path: "/sorting",
 			icon: <AlignEndHorizontal size={50} />,
+		},{
+			label: "Searching Algorithms",
+			path: "/searching",
+			icon: <Search size={50} />,
 		},
 		// {
 		// 	label: "Searching Algorithms",
@@ -23,7 +26,7 @@ export default function Home() {
 				<div className="text-white md:text-4xl">Algorithm Visualizer</div>
 			</div>
 
-			<div className="grid grid-cols-1 gap-3 place-items-center mt-5 flex-1">
+			<div className="grid grid-cols-2 gap-3 place-items-center mt-5 flex-1">
 				{menus.map((menu) => (
 					<div
 						key={menu.label}

@@ -16,3 +16,23 @@ export async function delay(time = 100) {
 		}, time);
 	});
 }
+
+/**
+ * Generates an array of n distinct numbers.
+ * @param {number} n - Number of items (max 70 in your case)
+ * @param {boolean} shuffle - Whether to randomize the order
+ */
+export const generateDistinctArray = (n, shuffle = true) => {
+  // 1. Create an array of sequential numbers [0, 1, 2, ... n-1]
+  const arr = Array.from({ length: n }, (_, i) => i + 1);
+
+  if (!shuffle) return arr;
+
+  // 2. Fisher-Yates Shuffle algorithm for true randomness
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+
+  return arr;
+};
